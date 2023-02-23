@@ -53,7 +53,10 @@
       ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fix --secure --set proxy_port={{ nessus_scanner_proxy.split(':')[1] }}"
       when: nessus_scanner_proxy|length>0
 
-# /opt/nessus/sbin/nessuscli fetch --security-center
+    # /opt/nessus/sbin/nessuscli fetch --security-center
+    - name: "Add Nessus security center"
+      ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fetch --security-center"
+      when: nessus_scanner_sec_center|bool
 
 - name: "Start nessus scanner"
   ansible.builtin.service:

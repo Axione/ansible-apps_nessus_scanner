@@ -5,3 +5,4 @@ nessus_scanner_force_install: false
 nessus_scanner_user: "nessus_admin"
 nessus_scanner_password: "strongpassword"
 nessus_scanner_proxy: "" # 10.1.1.1:8080
+nessus_scanner_sec_center: true
