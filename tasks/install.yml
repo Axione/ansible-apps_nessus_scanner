@@ -1,0 +1,63 @@
+---
+- name: "Check for nessuscli binary"
+  ansible.builtin.stat:
+    path: "{{ nessus_scanner_bin_path }}/nessuscli"
+  changed_when: false
+  register: nessuscli_bin
+
+- name: "Install tasks"
+  when: not nessuscli_bin.stat.exists or nessus_scanner_force_install|bool
+  block:
+    - name: "Install pexpect"
+      ansible.builtin.pip:
+        name: pexpect
+
+    - name: "Install Nessus deb file"
+      ansible.builtin.apt:
+        deb: "{{ nessus_scanner_url }}"
+      when: ansible_os_family == 'Debian'
+
+    - name: "Import Nessus gpg key"
+      ansible.builtin.rpm_key:
+        state: present
+        key: "{{ nessus_scanner_rpm_gpg_url }}"
+      when: ansible_os_family == 'RedHat'
+
+    - name: "Install nessus rpm"
+      ansible.builtin.yum:
+        name: "{{ nessus_scanner_url }}"
+        #disable_gpg_check: true
+        state: present
+      when: ansible_os_family == 'RedHat'
+
+    - name: "Add Nessus user"
+      ansible.builtin.expect:
+        echo: true
+        timeout: 5
+        command: "{{ nessus_scanner_bin_path }}/nessuscli adduser"
+        responses:
+          (.*)Login(.*): "{{ nessus_scanner_user }}"
+          (.*)Login password(.*): "{{ nessus_scanner_password }}"
+          (.*)Login password (again)(.*): "{{ nessus_scanner_password }}"
+          (.*)system administrator(.*): "y"
+          (.*)rules set(.*): "\n"
+          (.*)ok(.*): "y"
+
+    # /opt/nessus/sbin/nessuscli fix --secure --set proxy=10.1.80.5
+    - name: "Add Nessus proxy host"
+      ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fix --secure --set proxy={{ nessus_scanner_proxy.split(':')[0] }}"
+      when: nessus_scanner_proxy|length>0
+
+    # /opt/nessus/sbin/nessuscli fix --secure –-set proxy_port=80
+    - name: "Add Nessus proxy port"
+      ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fix --secure --set proxy_port={{ nessus_scanner_proxy.split(':')[1] }}"
+      when: nessus_scanner_proxy|length>0
+
+# /opt/nessus/sbin/nessuscli fetch --security-center
+
+- name: "Start nessus scanner"
+  ansible.builtin.service:
+    daemon_reload: true
+    name: nessusd
+    state: started
+    enabled: true

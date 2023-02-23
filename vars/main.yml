@@ -1,0 +1,4 @@
+---
+nessus_scanner_bin_path: "/opt/nessus/sbin"
+nessus_scanner_url: "https://www.tenable.com/downloads/api/v2/pages/nessus/files/{{ nessus_scanner_binary }}"
+nessus_scanner_rpm_gpg_url: "https://www.tenable.com/downloads/api/v2/pages/nessus/files/tenable-4096.gpg"
