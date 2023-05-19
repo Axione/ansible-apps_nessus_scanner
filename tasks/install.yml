@@ -8,6 +8,12 @@
 - name: "Install tasks"
   when: not nessuscli_bin.stat.exists or nessus_scanner_force_install|bool
   block:
+    - name: "Install requierements"
+      ansible.builtin.package:
+        name: "python3-pip"
+        state: present
+        update_cache: true
+
     - name: "Install pexpect"
       ansible.builtin.pip:
         name: pexpect

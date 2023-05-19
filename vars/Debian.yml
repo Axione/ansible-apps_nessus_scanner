@@ -1,2 +1,2 @@
 ---
-nessus_scanner_binary: "Nessus-{{ nessus_scanner_version }}-debian9_amd64.deb"
+nessus_scanner_binary: "Nessus-{{ nessus_scanner_version }}-debian10_amd64.deb"

@@ -11,17 +11,17 @@ galaxy_info:
       versions:
         - "focal"
         - "bionic"
-        - "jammy"
     - name: "Debian"
       versions:
-        - "bullseye"
         - "buster"
+        - "bullseye"
     - name: "Rocky"
       versions:
         - "8"
     - name: "OracleLinux"
       versions:
         - "8"
+        - "9"
 
   galaxy_tags:
     - tenable

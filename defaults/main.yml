@@ -1,5 +1,5 @@
 ---
-nessus_scanner_version: "10.4.2"
+nessus_scanner_version: "10.5.2"
 nessus_scanner_force_install: false
 
 nessus_scanner_user: "nessus_admin"
