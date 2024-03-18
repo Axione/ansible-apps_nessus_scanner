@@ -1,2 +1,0 @@
----
-nessus_scanner_binary: "Nessus-{{ nessus_scanner_version }}-es8.x86_64.rpm"

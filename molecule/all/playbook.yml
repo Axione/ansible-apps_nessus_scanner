@@ -4,6 +4,13 @@
   become: true
   any_errors_fatal: true
 
+  pre_tasks:
+    - name: "Install tzdata"
+      ansible.builtin.package:
+        name: "tzdata"
+        state: present
+      when: ansible_distribution == 'Ubuntu'
+
   tasks:
     - name: Include role
       ansible.builtin.include_role:

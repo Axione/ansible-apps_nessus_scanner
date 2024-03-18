@@ -59,16 +59,19 @@
     # /opt/nessus/sbin/nessuscli fix --secure --set proxy=10.1.80.5
     - name: "Add Nessus proxy host"
       ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fix --secure --set proxy={{ nessus_scanner_proxy.split(':')[0] }}"
+      changed_when: false
       when: nessus_scanner_proxy|length>0
 
     # /opt/nessus/sbin/nessuscli fix --secure –-set proxy_port=80
     - name: "Add Nessus proxy port"
       ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fix --secure --set proxy_port={{ nessus_scanner_proxy.split(':')[1] }}"
+      changed_when: false
       when: nessus_scanner_proxy|length>0
 
     # /opt/nessus/sbin/nessuscli fetch --security-center
     - name: "Add Nessus security center"
       ansible.builtin.command: "{{ nessus_scanner_bin_path }}/nessuscli fetch --security-center"
+      changed_when: false
       when: nessus_scanner_sec_center|bool
 
 - name: "Start nessus scanner"
