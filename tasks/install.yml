@@ -22,7 +22,8 @@
       ansible.builtin.pip:
         name: pexpect
       when:
-        - ansible_distribution != 'Debian' or (ansible_distribution == 'Debian' and ansible_distribution_major_version != "12")
+        - not (ansible_distribution == 'Debian' and ansible_distribution_major_version == "12")
+        - not (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == "24")
 
     - name: "DEBIAN | Install pexpect"
       ansible.builtin.package:
@@ -31,7 +32,7 @@
       retries: 12
       delay: 10
       until: pkg_result is success
-      when: ansible_distribution == 'Debian' and ansible_distribution_major_version == "12"
+      when: (ansible_distribution == 'Debian' and ansible_distribution_major_version == "12") or (ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == "24")
 
     - name: "DEBIAN | Install Nessus deb file"
       ansible.builtin.apt:
